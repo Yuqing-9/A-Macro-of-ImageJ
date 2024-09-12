@@ -1,0 +1,23 @@
+  // This macro for batch image processing by using "Pattern & Luminance Measurement" tool of micaToolbox plugin in ImageJ
+
+  macro "OpenImagesFromList" {
+      dir = getDirectory("");  //set your deirctory of your images
+      list = getFileList(dir);
+      save_path = "/your save path/";  //set your save path
+      for (i=0; i<list.length; i++) {
+          path = dir+list[i];
+          open(path);
+          run("Split Channels");
+          selectImage(list[i]+" (red)");
+          close();
+          selectImage(list[i]+" (blue)");
+          close();
+	  	  selectImage(list[i]+" (green)");
+          run("Pattern Colour & Luminance Measurements");
+   		  selectWindow("Pattern Results");
+	  	  saveAs("Text", save_path +list[i]+".csv");
+	      roiManager("Select", 1);
+          run("Close");
+          selectImage(list[i] + " (green)");
+          close();
+}
